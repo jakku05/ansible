@@ -1,0 +1,21 @@
+launch a instance with key value pair 
+
+install ansible on master node and create a configuration file ex:config.cfg and specify the path for the hosts ex(dev it has all the node info)
+copy the private key file (that .pem_file) from the desktop and change it premission it should has read write access to the root user
+
+
+inventory file look like:
+ubuntu@ip-172-31-0-142:~$ cat dev 
+[web]
+web1 ansible_host=44.192.110.13 ansible_user=ubuntu ansible_private_key_file=/home/ubuntu/newkey.pem
+
+ubuntu@ip-172-31-0-142:~$ 
+config.cfg look like:
+ubuntu@ip-172-31-0-142:~$ cat config.cfg 
+[defaults]
+inventory = dev/ 
+
+
+
+
+
