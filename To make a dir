@@ -1,0 +1,5 @@
+---
+- hosts: web1
+  tasks:
+    - name: Create a directory
+      shell: mkdir -p /path/to/directory
