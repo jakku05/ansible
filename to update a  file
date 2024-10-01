@@ -1,0 +1,37 @@
+---
+- name: Update cust.dat file with customer details
+  hosts: all
+  become: yes
+  vars:
+    company_name: "CMSI STERLING"
+    date_of_activity: "{{ lookup('pipe', 'date +%d/%m/%Y') }}"
+    my_name: "jt"
+    customer_id: "000210"
+    customer_ip_dc1: "11.222.333.444"
+    customer_ip_dc2: "111.22.333.444"
+    cust_dat_path: "/opt/ace/cust.dat"
+    ecust_script: "/opt/ace/ecust"
+
+  tasks:
+    - name: Ensure cust.dat file exists
+      file:
+        path: "{{ cust_dat_path }}"
+        state: touch
+
+    - name: Backup existing cust.dat file
+      copy:
+        src: "{{ cust_dat_path }}"
+        dest: "{{ cust_dat_path }}.bak"
+        remote_src: yes
+
+    - name: Update cust.dat file with customer details
+      lineinfile:
+        path: "{{ cust_dat_path }}"
+        regexp: "^{{ customer_id }} "
+        line: "{{ customer_id }} {{ customer_ip_dc1 }} 10 # {{ company_name }} {{ date_of_activity }} \"{{ my_name }}\""
+        create: yes
+
+    - name: Run ecust script to apply changes
+      command: "{{ ecust_script }}"
+      args:
+        chdir: "/opt/ace/"
