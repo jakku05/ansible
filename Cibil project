@@ -34,8 +34,8 @@ Reboot
         reboot_timeout: 600
 ubuntu@ip-172-31-29-125:~/.ansible$ 
 
-stop_services
-------------
+stop_services and start services
+---------------------------------
 
 ---
 - name: Stop services on the server
