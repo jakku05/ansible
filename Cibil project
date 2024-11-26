@@ -1,0 +1,52 @@
+Maintenance mode
+----------------
+
+---
+- name: Place server in maintenance mode
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create maintenance mode file
+      file:
+        path: /var/run/maintenance_mode
+        state: touch
+        owner: root
+        group: root
+        mode: '0644'
+      notify:
+        - Notify users about maintenance mode
+
+  handlers:
+    - name: Notify users about maintenance mode
+      command: echo "Server is now in maintenance mode."
+
+
+Reboot
+----------
+---
+- name: Reboot the server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Reboot the server
+      ansible.builtin.reboot:
+        msg: "Reboot initiated by Ansible"
+        reboot_timeout: 600
+ubuntu@ip-172-31-29-125:~/.ansible$ 
+
+stop_services
+------------
+
+---
+- name: Stop services on the server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Stop the specified services
+      service:
+        name: "{{ item }}"
+        state: stopped
+      loop:
+        - httpd
+        - nginx
+        - mysql
